@@ -3,3 +3,10 @@ node_modules/
 
 # Environment variables
 .env
+
+# Optional: logs
+logs/
+*.log
+
+# Optional: build output
+dist/
