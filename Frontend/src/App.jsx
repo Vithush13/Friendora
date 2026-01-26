@@ -12,6 +12,7 @@ import ChatBox from './pages/chatBox';
 import CreatPost from './pages/creatPost';
 import UserProvider from './components/context/userContext';
 
+
 function App() {
   return (
      <UserProvider>
