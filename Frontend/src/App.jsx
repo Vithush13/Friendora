@@ -11,6 +11,7 @@ import Profile from './pages/profile';
 import ChatBox from './pages/chatBox';
 import CreatPost from './pages/creatPost';
 import UserProvider from './components/context/userContext';
+import {Toaster} from 'react-hot-toast';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
      <UserProvider>
       <div>
     <Router>
+         <Toaster/>
           <Routes>
             <Route path="/" element={<Root />} />
             <Route path="/login" element={<Login />} />

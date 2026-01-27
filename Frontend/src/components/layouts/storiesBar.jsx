@@ -3,6 +3,7 @@ import { dummyStoriesData } from "../../assets/assets";
 import { Plus } from "lucide-react";
 import moment from "moment";
 import StoryModal from "../storyModal";
+import StoryViewer from "../storyViewer";
 export default function StoriesBar (){
     const [stories, setStories] =useState([]);
     const [showModal, setShowModal] =useState(false);
@@ -18,7 +19,7 @@ export default function StoriesBar (){
         },[])
 
     return (
-        <div className="w-screen sm:w-[calc(100vw-240px)] lg:max-w-2xl no-scrollerbar overflow-x-auto px-4">
+        <div className="w-screen sm:w-[calc(100vw-240px)] lg:max-w-2xl no-scrollbar overflow-x-auto px-4">
             <div className="flex gap-4 pb-5">
                 {/* Add Story Card */}
                 <div onClick={()=> setShowModal(true)} className="rounded-lg shadow-sm min-w-30 max-h-40 aspect-[3/4] cursor-pointer hover:shadow-lg transition-all duration-200 border-2 border-dashed border-indigo-300
@@ -33,7 +34,7 @@ export default function StoriesBar (){
                 {/*Stories Cards*/}
                 {
                     stories.map((story,index)=>(
-                        <div key ={index} className="relative rounded-lg shadow min-w-30 max-h-40 cursor-pointer hover:shadow-lg transition-all duration-200 
+                        <div onClick={()=> setViewStory(story)} key ={index} className="relative rounded-lg shadow min-w-30 max-h-40 cursor-pointer hover:shadow-lg transition-all duration-200 
                                   bg-gradient-to-b from-indigo-500 to-blue-600 hover:from-indigo-700 hover:to-blue-800 active:scale-95">
                             <img src={story.user.profile_picture} alt="" className="absolute size-8 top-3 left-3 z-10 rounded-full ring ring-gray-100 shadow"/>
                             <p className="absolute top-18 left-3 text-white/60 text-sm truncate max-w-24">{story.content}</p>
@@ -58,6 +59,9 @@ export default function StoriesBar (){
 
             {/* Add story Modal*/ }
             {showModal && <StoryModal setShowModal={setShowModal} fetchStory={fetchStories}/>}
+
+            {/*view Story Modal */}
+            {viewStory && <StoryViewer viewStory={viewStory} setViewStory={setViewStory}/> }
 
         </div>
     )

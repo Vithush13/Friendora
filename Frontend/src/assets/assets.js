@@ -1,6 +1,6 @@
 import logo from './logo.svg'
 import sample_cover from './sample_cover.jpg'
-import sample_profile from './sample_profile.jpg'
+import sample_profile from './vithu 1.jpg'
 import bgImage from './bgImage.png'
 import group_users from './group_users.png'
 import { Home, MessageCircle, Search, UserIcon, Users } from 'lucide-react'
@@ -26,8 +26,8 @@ export const menuItemsData = [
 export const dummyUserData = {
     "_id": "user_2zdFoZib5lNr614LgkONdD8WG32",
     "email": "admin@example.com",
-    "full_name": "John Warren",
-    "username": "john_warren",
+    "full_name": "Vithush",
+    "username": "vithu_13",
     "bio": "🌍 Dreamer | 📚 Learner | 🚀 Doer\r\nExploring life one step at a time.\r\n✨ Staying curious. Creating with purpose.",
     "profile_picture": sample_profile,
     "cover_photo": sample_cover,
