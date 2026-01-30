@@ -5,6 +5,7 @@ import { dummyPostsData,assets } from "../assets/assets";
 import Loading from "../components/layouts/loading";
 import StoriesBar from "../components/layouts/storiesBar";
 import PostCard from "../components/postCard";
+import RecentMessages from "../components/recentMessages";
 
 export default function Home(){
      const [feeds , setfeeds] = useState([]);
@@ -38,7 +39,7 @@ export default function Home(){
                     <p className="text-slate-600">Email marketing</p>
                     <p className="text-slate-400">Supercharge your marketing with a powerful, easy-to-use plate built for results.</p>
                 </div>
-               <h1> Resent message</h1>
+               <RecentMessages/>
             </div>        
         </div>
         </DashboardLayout>
