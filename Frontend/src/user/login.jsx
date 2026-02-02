@@ -3,6 +3,9 @@ import { useNavigate,Link } from "react-router-dom";
 import Input from "../components/input/input";
 import AuthLayout from "../components/layouts/authLayout";
 import { UserContext } from "../components/context/userContext";
+import { validateEmail } from "../utils/helper";
+import axiosInstance from "../utils/axios";
+import { API_PATHS } from "../utils/apiPath";
 
 export default function Login() {
     const[email,setEmail] = useState("");
@@ -11,7 +14,36 @@ export default function Login() {
     const {updateUser} = useContext(UserContext);
     
     const navigate = useNavigate();
-    const handleLogin = async(e) => {}
+    const handleLogin = async(e) => {
+       e.preventDefault();
+         if (!validateEmail(email)){
+          setError("Please enter a vaild Email.");
+          return;
+         }
+          if (!password){
+          setError("Please enter a Password.");
+          return;
+         }
+
+         setError("");
+
+         try {
+            const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN,{email,password});
+            const {token,user} = response.data;
+
+            if(token){
+              localStorage.setItem("token", token);
+              updateUser(user);
+              navigate("/home");
+            }
+         } catch(error){
+             if(error.response && error.response.data.message) {
+              setError(error.response.data.message);
+             } else {
+              setError("Something is wrong");
+             }
+         }
+    }
   return (
     <AuthLayout>
         <div className="  lg:w-[70%]  flex flex-col justify-center  bg-white/60 backdrop-blur-md z-10 p-15 rounded-2xl">
