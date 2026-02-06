@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   full_name: { type: String },
   password: { type: String, required: true },
   profile_picture: { type: String, default: "" },
+  cover_photo: { type: String, default: "" },
   bio: { type: String, default: "Hey there! I am using Friendora." },
   location: { type: String, default: "" },
   followers: [{ type: String, ref: "User" }],

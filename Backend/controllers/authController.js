@@ -1,5 +1,6 @@
 import User from "../model/user.js";
 import jwt from "jsonwebtoken";
+
 // Generate JWT token
 const generateToken = (id) => {
     return jwt.sign(
@@ -40,8 +41,6 @@ export const registerUser = async (req, res) => {
     res.status(500).json({ message: "Error registering user", error: err.message });
   }
 };
-
-
 
 
 export const loginUser = async (req, res) => {
@@ -111,3 +110,4 @@ export const verifyUser = async (req, res, next) => {
     res.status(401).json({ error: "Invalid token" });
   }
 };
+
