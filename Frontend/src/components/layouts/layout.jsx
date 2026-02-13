@@ -3,8 +3,10 @@ import { UserContext } from "../context/userContext";
 import SideMenu from "./sideBar";
 import Navbar from "./navbar";
 import Loading from "./loading";
+import { useSelector } from "react-redux";
+
 export default function DashboardLayout ({children, activeMenu}) {
-    const {user} = useContext(UserContext);
+    const user = useSelector((state)=> state.user.value);
     
     
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import './index.css'
 import './App.css'
@@ -9,12 +9,21 @@ import Login from './user/login';
 import SignUp from './user/signUp';
 import Profile from './pages/profile';
 import ChatBox from './pages/chatBox';
-import CreatPost from './pages/creatPost';
+import CreatePost from './pages/createPost';
 import UserProvider from './components/context/userContext';
 import {Toaster} from 'react-hot-toast';
-
+import {useDispatch} from 'react-redux';
+import { fetchUser } from './features/user/userSlice';
 
 function App() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetchUser(token));
+    }
+  }, [dispatch]);
   return (
      <UserProvider>
       <div>
@@ -28,7 +37,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
              <Route path="/profile/:id" element={<Profile />} />
             <Route path="/chatbox" element={<ChatBox />} />
-            <Route path="/createpost" element={<CreatPost />} />
+            <Route path="/createpost" element={<CreatePost />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/message" element={<Message />} />
           </Routes>
