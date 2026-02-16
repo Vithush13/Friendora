@@ -79,7 +79,7 @@ export const updateUserData = async (req, res) => {
 
 export const getUserData = async (req, res) => {
     try{
-         const userId = req.user.id;
+         const userId = req.user._id;
         const user = await User.findById(userId).select("-password");
 
         if(!user){
@@ -96,7 +96,7 @@ export const getUserData = async (req, res) => {
 //Find Users using username ,email, location, name
 export const discoverUsers = async (req, res) => {
     try{
-        const userId = req.user.id;
+        const userId = req.user._id;
         const {input} = req.body;
 
         const allUsers = await User.find(
@@ -123,7 +123,7 @@ export const discoverUsers = async (req, res) => {
 //follow
 export const followUsers = async (req, res) => {
     try{
-        const {userId} = req.auth();
+        const {userId} =  req.user._id;
         const {id} = req.body;
 
         const user = await User.findById(userId);
@@ -150,7 +150,7 @@ export const followUsers = async (req, res) => {
 //Unfollow
 export const unfollowUsers = async (req, res) => {
     try{
-        const {userId} = req.auth();
+        const {userId} =  req.user._id;
         const {id} = req.body;
 
         const user = await User.findById(userId);
@@ -172,7 +172,7 @@ export const unfollowUsers = async (req, res) => {
 //sent connection request
 export const sendConnectionRequest = async (req, res) => {
     try{
-         const userId = req.user.id;
+         const userId = req.user._id;
          const {id} = req.body;
 
         //Check if user has sent more than 20 connection request in the last 24 hours
@@ -217,7 +217,7 @@ export const sendConnectionRequest = async (req, res) => {
 //get user connections
 export const getUserConntections = async (req, res) => {
     try{
-         const userId = req.user.id;
+         const userId = req.user._id;
          const user = await User.findById(userId).populate('connections followers following')
 
          const connections = user.collections
@@ -237,7 +237,7 @@ export const getUserConntections = async (req, res) => {
 // Accept connection request
 export const acceptConntectionrequest = async (req, res) => {
     try{
-         const userId = req.user.id;
+         const userId = req.user._id;
          const {id} = req.body;
 
          const connection = await Connection.find({from_user_id: id, to_user_id: userId})

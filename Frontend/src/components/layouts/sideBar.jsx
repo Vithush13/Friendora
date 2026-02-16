@@ -1,13 +1,14 @@
-import { useContext } from "react";
 import { SIDE_MENU_DATA } from "../../utils/data";
-import { UserContext } from "../context/userContext";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCirclePlus } from "react-icons/fa6";
 import { LogOut } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+
 
 export default function SideMenu({ activeMenu }) {
-  const { user, clearUser } = useContext(UserContext);
+  const user = useSelector((state) => state.user.value);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClick = (route) => {
     if (route === "logout") {
@@ -18,8 +19,8 @@ export default function SideMenu({ activeMenu }) {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
-    clearUser();
+    localStorage.removeItem("token");
+    dispatch(clearUser());
     navigate("/login");
   };
 
@@ -59,8 +60,8 @@ export default function SideMenu({ activeMenu }) {
           </div>
 
           <div>
-            <h1 className="text-sm font-medium">Vithush{user?.full_name}</h1>
-            <p className="text-xs text-gray-500">@vithu13{user?.username}</p>
+            <h1 className="text-sm font-medium">{user?.full_name || "User"}</h1>
+            <p className="text-xs text-gray-500">@{user?.username || "username"}</p>
           </div>
         </div>
 
