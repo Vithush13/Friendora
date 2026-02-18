@@ -14,6 +14,7 @@ import UserProvider from './components/context/userContext';
 import {Toaster} from 'react-hot-toast';
 import {useDispatch} from 'react-redux';
 import { fetchUser } from './features/user/userSlice';
+import Discover from './pages/discover';
 
 function App() {
   const dispatch = useDispatch()
@@ -36,10 +37,11 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/profile" element={<Profile />} />
              <Route path="/profile/:id" element={<Profile />} />
-            <Route path="/chatbox" element={<ChatBox />} />
+            <Route path="/chatbox/:id" element={<ChatBox />} />
             <Route path="/createpost" element={<CreatePost />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/message" element={<Message />} />
+            <Route path="/discover" element={<Discover />} />
           </Routes>
     </Router>
     </div>

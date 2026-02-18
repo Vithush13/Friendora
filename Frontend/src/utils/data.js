@@ -1,4 +1,4 @@
-import{ LuHouse,LuMessageSquare,LuUsers,LuMessageCircle, LuUser, LuLogOut} from"react-icons/lu";
+import{ LuHouse,LuMessageSquare,LuUsers, LuUser, LuSearch} from"react-icons/lu";
 
 export const SIDE_MENU_DATA =[
     {
@@ -21,9 +21,9 @@ export const SIDE_MENU_DATA =[
     },
     {
         id:"04",
-        label:"Chat",
-        icon:LuMessageCircle,
-        path:"/chatbox"
+        label:"Discover",
+        icon:LuSearch,
+        path:"/discover"
     },
     {
         id:"05",
@@ -31,11 +31,5 @@ export const SIDE_MENU_DATA =[
         icon:LuUser,
         path:"/profile"
     },
-    {
-        id:"06",
-        label:"Logout",
-        icon:LuLogOut,
-        path:"logout",
-        className: "text-red-500 hover:text-red-600"
-    },
+   
 ];

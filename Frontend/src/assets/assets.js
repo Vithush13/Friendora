@@ -31,7 +31,7 @@ export const dummyUserData = {
     "bio": "🌍 Dreamer | 📚 Learner | 🚀 Doer\r\nExploring life one step at a time.\r\n✨ Staying curious. Creating with purpose.",
     "profile_picture": sample_profile,
     "cover_photo": sample_cover,
-    "location": "New York, NY",
+    "location": "Jaffna, Sri Lanka",
     "followers": ["user_2", "user_3"],
     "following": ["user_2", "user_3"],
     "connections": ["user_2", "user_3"],

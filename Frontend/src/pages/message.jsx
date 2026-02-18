@@ -7,7 +7,7 @@ export default function Message(){
 
     const navigate = useNavigate()
     return(
-        <DashboardLayout activeMenu="message">
+        <DashboardLayout activeMenu="Message">
                 <div className="min-h-screen relative bg-slate-50">
                     <div className="max-w-6xl mx-auto p-6">
                       {/*Title */}
@@ -27,7 +27,7 @@ export default function Message(){
                                         <p className="text-sm text-gray-600">{user.bio}</p>
                                     </div>
                                     <div className="flex flex-col gap-2 mt-4">
-                                        <button onClick={()=> navigate(`/messages/${user._id}`)} className="size-10 flex items-center justify-center text-sm rounded bg-slate-100 hover:bg-slate-200 text-slate-800 active:scale-95 transition cursor-pointer gap-1">
+                                        <button onClick={()=> navigate(`/chatbox/${user._id}`)} className="size-10 flex items-center justify-center text-sm rounded bg-slate-100 hover:bg-slate-200 text-slate-800 active:scale-95 transition cursor-pointer gap-1">
                                             <MessageSquare className="w-4 h-4"/>
                                         </button>
                                         <button  onClick={()=> navigate(`/profile/${user._id}`)} className="size-10 flex items-center justify-center text-sm rounded bg-slate-100 hover:bg-slate-200 text-slate-800 active:scale-95 transition cursor-pointer">

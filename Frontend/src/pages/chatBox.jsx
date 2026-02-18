@@ -20,7 +20,7 @@ export default function ChatBox(){
     }, [messages]);
 
     return user && (
-        <DashboardLayout activeMenu="chatbox">
+        <DashboardLayout activeMenu="Message">
             <div className="flex flex-col h-screen bg-gray-100">
                 
                 {/* Header */}
