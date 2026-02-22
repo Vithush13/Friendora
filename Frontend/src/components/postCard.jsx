@@ -3,19 +3,46 @@ import React, { useState } from "react";
 import moment from "moment";
 import { dummyUserData } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axiosInstance from "../utils/axios";
+import { API_PATHS } from "../utils/apiPath";
+import toast from "react-hot-toast";
 
 export default function PostCard({post}){
 
     const postWithHashtags = post.content.replace(/(#\w+)/g, '<span class="text-indigo-600">$1</span>')
     const [likes,setLikes] = useState(post.likes_count);
-    const currentUser = dummyUserData;
+    const currentUser = useSelector((state) => state.user.value);
     const navigate = useNavigate();
+
+    const handleLike = async ()=>{
+         const token = localStorage.getItem("token");
+        try {
+            const {data} = await axiosInstance.post(API_PATHS.POST.LIKE,{postId: post._id}, {headers: {Authorization: `Bearer ${await token}`}});
+
+            if(data.success){
+                toast.success(data.message);
+                setLikes(prev =>{
+                    if(prev.includes(currentUser._id)){
+                        return prev.filter(id=> id !== currentUser._id)
+                    }else{
+                        return [...prev, currentUser._id]
+                    }
+                })
+            }else{
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message)
+            
+        }
+    }
 
     return(
         <div className="bg-white rounded-xl shadow p-4 space-y-4 w-full max-w-2xl">
             {/*User Info */}
             <div  onClick={()=> navigate('/profile/' + post.user._id)} className="inline-flex items-center gap-3 cursor-pointer">
-                <img src={post.user.profile_picture} alt="" className="w-10 h-10 rounded-full shadow"/>
+                <img src={post.user.profile_picture} alt="" className="w-10 h-10 rounded-full shadow object-cover"/>
                 <div>
                     <div className="flex items-center space-x-1">
                         <span>{post.user.full_name}</span>
@@ -38,7 +65,9 @@ export default function PostCard({post}){
             {/*Action */}
             <div className="flex items-center gap-4 text-gray-600 text-sm pt-2 border-t border-gray-300">
                 <div className="flex items-center gap-1">
-                    <Heart className={`w-4 h-4 cursor-pointer ${likes.includes(currentUser._id) && 'text-red-500'}`} />
+                    <Heart
+                             onClick={handleLike} fill={likes.includes(currentUser?._id) ? "currentColor" : "none"} className={`w-5 h-5 cursor-pointer transition-all duration-200 ${likes.includes(currentUser?._id)
+                          ? "text-red-500": "text-gray-500 hover:text-red-400"}`}/>
                     <span>{likes.length}</span>
                 </div>
                  <div className="flex items-center gap-1">

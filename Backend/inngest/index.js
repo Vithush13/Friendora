@@ -6,7 +6,7 @@ import Story from "../model/story.js";
 import Message from "../model/message.js";
 
 // Create a Client to send and receive events
-export const inngest = new Inngest({id: "frienora-app"});
+export const inngest = new Inngest({id: "frienora-app", eventKey: process.env.INNGEST_EVENT_KEY});
 
 // Inngest Function to save user data to a database
 const syncUserCreation = inngest.createFunction(

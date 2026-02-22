@@ -2,17 +2,18 @@ import fs from 'fs';
 import imagekit from '../config/imagekit.js';
 import Story from '../model/story.js';
 import { inngest } from '../inngest/index.js';
+import User from '../model/user.js';
 
 //Add User Story
 export const addUserStory = async (req, res) => {
     try{
          const userId = req.user.id;
          const {content, media_type, background_color} = req.body;
-         const media = req.files;
+         const media = req.file;
          let media_url = '';
 
          //upload media to imagekit
-         if(media_type === 'image' || media_type === 'video'){
+         if((media_type === 'image' || media_type === 'video') && media){
             const fileBuffer = fs.readFileSync(media.path)
             const response = await imagekit.upload({
                 file:fileBuffer,
@@ -49,7 +50,7 @@ export const getStories = async (req, res) => {
          const user = await User.findById(userId);
 
          // User connection and following
-         const userIds= [userId, ...user.connection, ...user.following]
+         const userIds= [userId, ...user.connection  || [], ...user.following || []]
 
          const stories = await Story.find({
             user: {$in: userIds}

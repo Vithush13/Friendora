@@ -6,13 +6,29 @@ import Loading from "../components/layouts/loading";
 import StoriesBar from "../components/layouts/storiesBar";
 import PostCard from "../components/postCard";
 import RecentMessages from "../components/recentMessages";
+import axiosInstance from "../utils/axios";
+import { API_PATHS } from "../utils/apiPath";
+import toast from "react-hot-toast";
 
 export default function Home(){
-     const [feeds , setfeeds] = useState([]);
+     const [feeds , setFeeds] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchFeeds = async ()=>{
-        setfeeds(dummyPostsData)
+         const token = localStorage.getItem("token");
+        try {
+            setLoading(true)
+            const {data} = await axiosInstance.get(API_PATHS.POST.FEED, {headers: {Authorization: `Bearer ${await token}`}});
+
+            if(data.success){
+                setFeeds(data.posts)
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+            
+        }
         setLoading(false)
     }
 
