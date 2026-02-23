@@ -1,17 +1,19 @@
 import DashboardLayout from "../components/layouts/layout"
-import {
-    dummyConnectionsData as connections,
-    dummyFollowersData as followers,
-    dummyFollowingData as following,
-    dummyPendingConnectionsData as pendingConnections
-} from "../assets/assets"
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom"
 import { MessageSquare, UserCheck, UserPlus, UserRoundPen, Users } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchConnections } from "../features/connections/connectionSlice";
+import axiosInstance from "../utils/axios";
+import { API_PATHS } from "../utils/apiPath";
+import toast from "react-hot-toast";
 
 export default function Friends(){
     const [currentTab, setCurrentTab] = useState('Followers');
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const {connections, pendingConnections, followers, following} = useSelector ((state)=>state.connections);
+    const token = localStorage.getItem("token"); 
     const dataArray = [
         {label:'Followers', value: followers, icon:Users},
         {label:'Following', value: following, icon:UserCheck},
@@ -19,6 +21,50 @@ export default function Friends(){
         {label:'Connections', value: connections, icon:UserPlus}
     ]
 
+     const handleUnfollow = async (userId) => { 
+    try {
+        const { data } = await axiosInstance.post(
+            API_PATHS.USER.UNFOLLOW,
+            { id: userId },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (data.success) {
+            toast.success(data.message);
+            dispatch(fetchConnections(token));
+        } else {
+            toast.error(data.message);
+        }
+    } catch (error) {
+        toast.error(error.response?.data?.message || error.message);
+    }
+};
+
+       const acceptConnection = async (userId) => { 
+    try {
+        const { data } = await axiosInstance.post(
+            API_PATHS.USER.ACCEPT,
+            { id: userId },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (data.success) {
+            toast.success(data.message);
+            dispatch(fetchConnections(token));
+        } else {
+            toast.error(data.message);
+        }
+    } catch (error) {
+        toast.error(error.response?.data?.message || error.message);
+    }
+     };
+
+     useEffect(() => {
+        if (token) {
+            dispatch(fetchConnections(token));
+        }
+    }, [dispatch]);
+  
     return(
         <DashboardLayout activeMenu="Friends">
                 <div className="min-h-screen bg-slate-50">
@@ -32,7 +78,7 @@ export default function Friends(){
                         <div className="mb-8 flex flex-wrap gap-6">
                             {dataArray.map((item, index)=>(
                                 <div key={index} className="flex flex-col items-center justify-center gap-1 border h-20 w-40 border-gray-200 bg-white shadow rounded-md">
-                                    <b>{item.value.length}</b>
+                                    <b>{item.value?.length || 0}</b>
                                     <p className="text-slate-600">{item.label}</p>
                                 </div>
                             ))}
@@ -55,9 +101,9 @@ export default function Friends(){
 
                         {/*Connections */}
                         <div className="flex flex-wrap gap-6 mt-6">
-                            {dataArray.find((item)=>item.label === currentTab).value.map((user)=>(
+                            {dataArray.find((item)=>item.label === currentTab)?.value?.map((user)=>(
                                 <div key={user._id} className="w-full max-w-88 flex gap-5 p-6 bg-white shadow-md rounded-md">
-                                    <img src={user.profile_picture} alt="" className="rounded-full w-12 h-12 shadow-md mx-auto"/>
+                                    <img src={user.profile_picture} alt="" className="rounded-full w-12 h-12 shadow-md mx-auto object-cover"/>
                                     <div className="flex-1">
                                         <p className="font-medium text-slate-700">{user.full_name}</p>
                                         <p className="text-slate-500">@{user.username}</p>
@@ -71,7 +117,7 @@ export default function Friends(){
                                             }
                                             {
                                                 currentTab === 'Following' && (
-                                                    <button className="w-full p-2 text-sm rounded bg-slate-200 hover:bg-slate-300 text-black
+                                                    <button onClick={()=> handleUnfollow(user._id)} className="w-full p-2 text-sm rounded bg-slate-200 hover:bg-slate-300 text-black
                                                               active:scale-95 transition cursor-pointer">
                                                         Unfollow
                                                     </button>
@@ -79,7 +125,7 @@ export default function Friends(){
                                             }
                                             {
                                                 currentTab === 'Pending' && (
-                                                    <button className="w-full p-2 text-sm rounded bg-slate-200 hover:bg-slate-300 text-black
+                                                    <button onClick={()=> acceptConnection(user._id)} className="w-full p-2 text-sm rounded bg-slate-200 hover:bg-slate-300 text-black
                                                               active:scale-95 transition cursor-pointer">
                                                         Accept
                                                     </button>
@@ -87,7 +133,7 @@ export default function Friends(){
                                             }
                                             {
                                                 currentTab === 'Connections' && (
-                                                    <button onClick={()=> navigate(`/messages/${user._id}`)} className="w-full p-2 text-sm
+                                                    <button onClick={()=> navigate(`/chatbox/${user._id}`)} className="w-full p-2 text-sm
                                                      rounded bg-slate-200 hover:bg-slate-300 text-slate-800 active:scale-95 transition cursor-pointer flex items-center justify-center gap-1">
                                                         <MessageSquare className="w-4 h-4" />       
                                                         Message

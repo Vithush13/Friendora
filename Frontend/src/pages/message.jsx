@@ -2,9 +2,11 @@ import { Eye, MessageSquare } from "lucide-react"
 import { dummyConnectionsData } from "../assets/assets"
 import DashboardLayout from "../components/layouts/layout"
 import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 export default function Message(){
-
+  
+    const {connections} = useSelector((state)=>state.connections)
     const navigate = useNavigate()
     return(
         <DashboardLayout activeMenu="Message">
@@ -18,9 +20,9 @@ export default function Message(){
 
                         {/*Connected User */}
                         <div className="flex flex-col gap-3">
-                            {dummyConnectionsData.map((user)=>(
+                            {connections.map((user)=>(
                                 <div key={user._id} className="max-w-xl flex flex-warp gap-5 p-6 bg-white shadow rounded-md">
-                                    <img src={user.profile_picture} alt="" className="rounded-full size-12 mx-auto"/>
+                                    <img src={user.profile_picture} alt="" className="rounded-full size-12 mx-auto object-cover"/>
                                     <div className="flex-1">
                                         <p className="font-medium text-slate-700">{user.full_name}</p>
                                         <p className="text-slate-500">@{user.username}</p>

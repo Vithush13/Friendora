@@ -110,7 +110,7 @@ export const discoverUsers = async (req, res) => {
           }
         )
 
-        const filteredUser = allUsers.filter(user=> user._id !== userId);
+        const filteredUser = allUsers.filter((user)=> user._id.toString() !== userId.toString());
 
         res.status(200).json({success:true, users: filteredUser});
     } catch(error){
@@ -123,11 +123,14 @@ export const discoverUsers = async (req, res) => {
 //follow
 export const followUsers = async (req, res) => {
     try{
-        const {userId} =  req.user._id;
+        const userId = req.user._id;
         const {id} = req.body;
 
         const user = await User.findById(userId);
-
+        
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
         if(user.following.includes(id)){
           return res.json({success:false, message: ' You are already followind this user'})
         }
@@ -149,24 +152,37 @@ export const followUsers = async (req, res) => {
 
 //Unfollow
 export const unfollowUsers = async (req, res) => {
-    try{
-        const {userId} =  req.user._id;
-        const {id} = req.body;
+    try {
+        const userId = req.user._id;
+        const { id } = req.body;
 
         const user = await User.findById(userId);
-        user.following = user.following.filter(user=> user !== id);
+        const toUser = await User.findById(id);
+
+        if (!user || !toUser) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        // Remove from following list
+        user.following = user.following.filter(
+            (followId) => followId.toString() !== id
+        );
+        await user.save();
+
+        // Remove from followers list
+        toUser.followers = toUser.followers.filter(
+            (followerId) => followerId.toString() !== userId.toString()
+        );
         await toUser.save();
 
-        const toUser = await User.findById(userId);
-        toUser.followers = toUser.followers.filter(user=> user !== userId);
-        await toUser.save();
-
-        res.status(200).json({success:true, message:'you are no longer following this user'});
-    } catch(error){
-      console.log(error);
-        res.status(500).json({success:true, message:error.message});
+        res.status(200).json({
+            success: true,
+            message: "You are no longer following this user"
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
     }
- 
 };
 
 //sent connection request
@@ -187,8 +203,8 @@ export const sendConnectionRequest = async (req, res) => {
         //Check if users are already connected
         const connection = await Connection.findOne({
           $or: [
-            {rom_user_id: userId, to_user_id: id},
-            {rom_user_id: id, to_user_id: userId},
+            {from_user_id: userId, to_user_id: id},
+            {from_user_id: id, to_user_id: userId},
           ]
         })
 
@@ -220,7 +236,7 @@ export const getUserConntections = async (req, res) => {
          const userId = req.user._id;
          const user = await User.findById(userId).populate('connections followers following')
 
-         const connections = user.collections
+         const connections = user.connections
          const followers = user.followers
          const following = user.following
 
@@ -240,7 +256,7 @@ export const acceptConntectionrequest = async (req, res) => {
          const userId = req.user._id;
          const {id} = req.body;
 
-         const connection = await Connection.find({from_user_id: id, to_user_id: userId})
+         const connection = await Connection.findOne({from_user_id: id, to_user_id: userId})
 
          if(!connection){
           return res.json({success:false, message:'Connection not found'})

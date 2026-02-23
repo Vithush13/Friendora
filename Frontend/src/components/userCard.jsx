@@ -1,13 +1,52 @@
 import { MapPin, MessageCircle, Plus, UserPlus } from "lucide-react";
 import { dummyUserData } from "../assets/assets";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axiosInstance from "../utils/axios";
+import { API_PATHS } from "../utils/apiPath";
+import toast from "react-hot-toast";
+import { fetchUser } from "../features/user/userSlice";
 
 
 export default function UserCard ({user}){
-    const currentUser = dummyUserData
+    const currentUser = useSelector((state) => state.user.value);
+    const token = localStorage.getItem("token"); 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const handleFollow =async ()=>{}
+    const handleFollow =async ()=>{
+        try {
+        const { data } = await axiosInstance.post(
+            API_PATHS.USER.FOLLOW, { id: user._id }, { headers: { Authorization: `Bearer ${token}` } } );
 
-    const handleConnectionRequest =async ()=>{}
+        if (data.success) {
+            toast.success(data.message);
+            dispatch(fetchUser(token));
+        } else {
+            toast.error(data.message);
+        }
+    } catch (error) {
+        toast.error(error.response?.data?.message || error.message);
+    }
+    }
+
+    const handleConnectionRequest =async ()=>{
+        if(currentUser.connections.includes(user._id)){
+            return navigate('/message/' + user._id)
+        }
+             try {
+                const { data } = await axiosInstance.post(
+                 API_PATHS.USER.CONNECT, { id: user._id }, { headers: { Authorization: `Bearer ${token}` } } );
+
+                if (data.success) {
+                  toast.success(data.message);
+                } else {
+                   toast.error(data.message);
+                }
+            } catch (error) {
+                toast.error(error.response?.data?.message || error.message);
+       }
+    }
 
     return(
         <div key={user._id} className="p-4 pt-6 flex flex-col justify-between w-72 shadow border-gray-200 rounded-md">

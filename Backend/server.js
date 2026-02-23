@@ -29,7 +29,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/post", postRouter);
 app.use("/api/v1/story", storyRouter);
-app.use("/api/v1/message", messageRouter);
-console.log("INNGEST_EVENT_KEY =", process.env.INNGEST_EVENT_KEY);
+app.use("/api/v1/messages", messageRouter);
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

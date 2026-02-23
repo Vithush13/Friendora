@@ -4,22 +4,42 @@ import { dummyConnectionsData} from "../assets/assets"
 import { Search } from "lucide-react";
 import UserCard from "../components/userCard";
 import Loading from "../components/layouts/loading";
+import axiosInstance from "../utils/axios";
+import { API_PATHS } from "../utils/apiPath";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { fetchUser } from "../features/user/userSlice";
+import { useEffect } from "react";
 
 export default function Discover(){
+    const dispatch = useDispatch();
     const [input, setInput] = useState('');
-    const[users, setUsers] = useState(dummyConnectionsData)
+    const[users, setUsers] = useState([])
     const [loading, setLoading] = useState(false);
+    const token = localStorage.getItem("token"); 
 
     const handleSearch = async(e) =>{
         if(e.key == "Enter"){
-            setUsers([])
-            setLoading(true)
-            setTimeout(() => {
-                setUsers(dummyConnectionsData)
+            try {
+                setUsers([])
+                setLoading(true)
+                const {data} = await axiosInstance.post(API_PATHS.USER.DISCOVER, {input}, {headers: {Authorization: `Bearer ${token}`}})
+                data.success ? setUsers(data.users) : toast.error(data.message)
                 setLoading(false)
-            }, 1000);
+                setInput('')
+            } catch (error) {
+                toast.error(error.message);
+                
+            }
+            setLoading(false);
         }
     }
+
+    useEffect(() => {
+            if (token) {
+                dispatch(fetchUser(token));
+            }
+        }, [dispatch]);
     return(
         <DashboardLayout activeMenu="Discover">
                 <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">

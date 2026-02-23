@@ -15,6 +15,7 @@ import {Toaster} from 'react-hot-toast';
 import {useDispatch} from 'react-redux';
 import { fetchUser } from './features/user/userSlice';
 import Discover from './pages/discover';
+import { fetchConnections } from './features/connections/connectionSlice';
 
 function App() {
   const dispatch = useDispatch()
@@ -23,6 +24,7 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) {
       dispatch(fetchUser(token));
+      dispatch(fetchConnections(token));
     }
   }, [dispatch]);
   return (
@@ -36,8 +38,8 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/profile" element={<Profile />} />
-             <Route path="/profile/:id" element={<Profile />} />
-            <Route path="/chatbox/:id" element={<ChatBox />} />
+             <Route path="/profile/:profileId" element={<Profile />} />
+            <Route path="/chatbox/:userId" element={<ChatBox />} />
             <Route path="/createpost" element={<CreatePost />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/message" element={<Message />} />

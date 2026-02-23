@@ -3,8 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaCirclePlus } from "react-icons/fa6";
 import { LogOut } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
-
-
+import {clearUser} from "../../features/user/userSlice"
 export default function SideMenu({ activeMenu }) {
   const user = useSelector((state) => state.user.value);
   const navigate = useNavigate();
@@ -69,7 +68,7 @@ export default function SideMenu({ activeMenu }) {
           onClick={handleLogout}
           className="text-gray-500 hover:text-red-500 transition"
         >
-          <LogOut size={18} />
+          <LogOut size={18} className="cursor-pointer"/>
         </button>
       </div>
     </div>

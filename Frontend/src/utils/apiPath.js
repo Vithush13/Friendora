@@ -9,6 +9,12 @@ export const API_PATHS = {
     USER: {
         PROFILE: "api/v1/user/profiles",
         UPDATE:  "api/v1/user/update",
+        CONNECTIONS:  "api/v1/user/connections",
+        UNFOLLOW:  "api/v1/user/unfollow",
+        ACCEPT:  "api/v1/user/accept",
+        DISCOVER:  "api/v1/user/discover",
+        FOLLOW:  "api/v1/user/follow",
+        CONNECT:  "api/v1/user/connect",
     },
     POST: {
         ADD: "api/v1/post/add",
@@ -19,4 +25,8 @@ export const API_PATHS = {
        CREATE: "api/v1/story/create",
        GET_STORY: "api/v1/story/get",
     },
+    MESSAGES:{
+        GET_MESSAGE: "api/v1/messages/get",
+        SENT: "api/v1/messages/send",
+    }
 };
